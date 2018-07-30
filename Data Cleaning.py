@@ -66,3 +66,54 @@ plt.show()
 df_subset.plot(kind='scatter', x='initial_cost', y='total_est_fee', rot=70)
 plt.show()
 
+# Print the head of airquality
+print(airquality.head(5))
+
+# Melt airquality: airquality_melt
+airquality_melt = pd.melt(frame=airquality, id_vars=['Month', 'Day'], value_vars=['Ozone', 'Solar.R', 'Wind', 'Temp'])
+
+# Print the head of airquality_melt
+print(airquality_melt.head(5))
+
+# Print the head of airquality
+print(airquality.head(5))
+
+# Melt airquality: airquality_melt
+airquality_melt = pd.melt(frame=airquality, id_vars=['Month', 'Day'], var_name='measurement', value_name='reading')
+
+# Print the head of airquality_melt
+print(airquality_melt.head(5))
+
+# Print the head of airquality_melt
+print(airquality_melt.head(5))
+
+# Pivot airquality_melt: airquality_pivot
+airquality_pivot = airquality_melt.pivot_table(index=['Month', 'Day'], columns='measurement', values='reading')
+
+# Print the head of airquality_pivot
+print(airquality_pivot.head(5))
+
+# Print the index of airquality_pivot
+print(airquality_pivot.index)
+
+# Reset the index of airquality_pivot: airquality_pivot_reset
+airquality_pivot_reset = airquality_pivot.reset_index()
+
+# Print the new index of airquality_pivot_reset
+print(airquality_pivot_reset.index)
+
+# Print the head of airquality_pivot_reset
+print(airquality_pivot_reset.head(5))
+
+# Pivot airquality_dup: airquality_pivot
+airquality_pivot = airquality_dup.pivot_table(index=['Month', 'Day'], columns='measurement', values='reading', aggfunc=np.mean)
+
+# Reset the index of airquality_pivot
+airquality_pivot = airquality_pivot.reset_index()
+
+# Print the head of airquality_pivot
+print(airquality_pivot.head(5))
+
+# Print the head of airquality
+print(airquality.head(5))
+
