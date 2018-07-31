@@ -117,3 +117,48 @@ print(airquality_pivot.head(5))
 # Print the head of airquality
 print(airquality.head(5))
 
+# Melt tb: tb_melt
+tb_melt = pd.melt(frame=tb, id_vars=['country', 'year'])
+
+# Create the 'gender' column
+tb_melt['gender'] = tb_melt.variable.str[0]
+
+# Create the 'age_group' column
+tb_melt['age_group'] = tb_melt.variable.str[1:]
+
+# Print the head of tb_melt
+print(tb_melt.head())
+
+# Melt ebola: ebola_melt
+ebola_melt = pd.melt(ebola, id_vars=['Date', 'Day'], var_name='type_country', value_name='counts')
+
+# Create the 'str_split' column
+ebola_melt['str_split'] = ebola_melt.type_country.str.split('_')
+
+# Create the 'type' column
+ebola_melt['type'] = ebola_melt.str_split.str.get(0)
+
+# Create the 'country' column
+ebola_melt['country'] = ebola_melt.str_split.str.get(1)
+
+# Print the head of ebola_melt
+print(ebola_melt.head())
+
+# Concatenate uber1, uber2, and uber3: row_concat
+row_concat = pd.concat([uber1, uber2, uber3])
+
+# Print the shape of row_concat
+print(row_concat.shape)
+
+# Print the head of row_concat
+print(row_concat.head(5))
+
+# Concatenate ebola_melt and status_country column-wise: ebola_tidy
+ebola_tidy = pd.concat([ebola_melt, status_country], axis=1)
+
+# Print the shape of ebola_tidy
+print(ebola_tidy.shape)
+
+# Print the head of ebola_tidy
+print(ebola_tidy.head(5))
+
