@@ -162,3 +162,129 @@ print(ebola_tidy.shape)
 # Print the head of ebola_tidy
 print(ebola_tidy.head(5))
 
+# Import necessary modules
+import glob
+import pandas as pd
+
+# Write the pattern: pattern
+pattern = '*.csv'
+
+# Save all file matches: csv_files
+csv_files = glob.glob(pattern)
+
+# Print the file names
+print(csv_files)
+
+# Load the second file into a DataFrame: csv2
+csv2 = pd.read_csv(csv_files[1])
+
+# Print the head of csv2
+print(csv2.head())
+
+# Create an empty list: frames
+frames = []
+
+#  Iterate over csv_files
+for csv in csv_files:
+    #  Read csv into a DataFrame: df
+    df = pd.read_csv(csv)
+
+    # Append df to frames
+    frames.append(df)
+
+# Concatenate frames into a single DataFrame: uber
+uber = pd.concat(frames)
+
+# Print the shape of uber
+print(uber.shape)
+
+# Print the head of uber
+print(uber.head())
+
+# Merge the DataFrames: o2o
+o2o = pd.merge(left=site, right=visited, left_on='name', right_on='site')
+
+# Merge site and visited: m2m
+m2m = pd.merge(left=site, right=visited, left_on='name', right_on='site')
+
+# Merge m2m and survey: m2m
+m2m = pd.merge(left=m2m, right=survey, left_on='ident', right_on='taken')
+
+# Print the first 20 lines of m2m
+print(m2m.head(20))
+
+# Convert the sex column to type 'category'
+tips.sex = tips.sex.astype('category')
+
+# Convert the smoker column to type 'category'
+tips.smoker = tips.smoker.astype('category')
+
+# Print the info of tips
+print(tips.info())
+
+# Convert 'total_bill' to a numeric dtype
+tips['total_bill'] = pd.to_numeric(tips['total_bill'], errors='coerce')
+
+# Convert 'tip' to a numeric dtype
+tips['tip'] = pd.to_numeric(tips['tip'], errors='coerce')
+
+# Print the info of tips
+print(tips.info())
+
+# Import the regular expression module
+import re
+
+# Compile the pattern: prog
+prog = re.compile('\d{3}-\d{3}-\d{4}')
+
+# See if the pattern matches
+result = prog.match('123-456-7890')
+print(bool(result))
+
+# See if the pattern matches
+result2 = prog.match('1123-456-7890')
+print(bool(result2))
+
+# Import the regular expression module
+import re
+
+# Find the numeric values: matches
+matches = re.findall('\d+', 'the recipe calls for 10 strawberries and 1 banana')
+
+# Print the matches
+print(matches)
+
+# Write the first pattern
+pattern1 = bool(re.match(pattern='\d{3}-\d{3}-\d{4}', string='123-456-7890'))
+print(pattern1)
+
+# Write the second pattern
+pattern2 = bool(re.match(pattern='\$\d*\.\d{2}', string='$123.45'))
+print(pattern2)
+
+# Write the third pattern
+pattern3 = bool(re.match(pattern='[A-Z]\w*', string='Australia'))
+print(pattern3)
+
+
+# Define recode_sex()
+def recode_sex(sex_value):
+    # Return 1 if sex_value is 'Male'
+    if sex_value == 'Male':
+        return 1
+
+    # Return 0 if sex_value is 'Female'
+    elif sex_value == 'Female':
+        return 0
+
+    # Return np.nan
+    else:
+        return np.nan
+
+
+# Apply the function to the sex column
+tips['sex_recode'] = tips.sex.apply(recode_sex)
+
+# Print the first five rows of tips
+print(tips.head())
+
