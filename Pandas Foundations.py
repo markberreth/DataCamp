@@ -317,3 +317,65 @@ daily_departures = dallas.resample('D').sum()
 # Generate the summary statistics for daily Dallas departures: stats
 stats = daily_departures.describe()
 
+# Reset the index of ts2 to ts1, and then use linear interpolation to fill in the NaNs: ts2_interp
+ts2_interp = ts2.reindex(ts1.index).interpolate(how='linear')
+
+# Compute the absolute difference of ts1 and ts2_interp: differences
+differences = np.abs(ts1-ts2_interp)
+
+# Generate and print summary statistics of the differences
+print(differences.describe())
+
+# Build a Boolean mask to filter out all the 'LAX' departure flights: mask
+mask = df['Destination Airport'] == 'LAX'
+
+# Use the mask to subset the data: la
+la = df[mask]
+
+# Combine two columns of data to create a datetime series: times_tz_none
+times_tz_none = pd.to_datetime( la['Date (MM/DD/YYYY)'] + ' ' + la['Wheels-off Time'] )
+
+# Localize the time to US/Central: times_tz_central
+times_tz_central = times_tz_none.dt.tz_localize('US/Central')
+
+# Convert the datetimes from US/Central to US/Pacific
+times_tz_pacific = times_tz_central.dt.tz_convert('US/Pacific')
+
+# Plot the raw data before setting the datetime index
+df.plot()
+plt.show()
+
+# Convert the 'Date' column into a collection of datetime objects: df.Date
+df.Date = pd.to_datetime(df['Date'])
+
+# Set the index to be the converted 'Date' column
+df.set_index('Date', inplace=True)
+
+# Re-plot the DataFrame to see that the axis is now datetime aware!
+df.plot()
+plt.show()
+
+# Plot the summer data
+df.Temperature['2010-Jun':'2010-Aug'].plot()
+plt.show()
+plt.clf()
+
+# Plot the one week data
+df.Temperature['2010-06-10':'2010-06-17'].plot()
+plt.show()
+plt.clf()
+
+# Import pandas
+import pandas as pd
+
+# Read in the data file: df
+df = pd.read_csv(data_file)
+
+# Print the output of df.head()
+print(df.head())
+
+# Read in the data file with header=None: df_headers
+df_headers = pd.read_csv(data_file, header=None)
+
+# Print the output of df_headers.head()
+print(df_headers.head())
