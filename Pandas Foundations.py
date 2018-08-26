@@ -452,7 +452,7 @@ print(difference.mean())
 sunny = df_clean.loc[df_clean['sky_condition'] == 'CLR']
 
 # Select days that are overcast: overcast
-overcast = df_clean['sky_condition'].str.contains('OVC')
+overcast = df_clean.loc[df_clean['sky_condition'].str.contains('OVC')]
 
 # Resample sunny and overcast, aggregating by maximum daily temperature
 sunny_daily_max = sunny.resample('D').max()
@@ -460,3 +460,58 @@ overcast_daily_max = overcast.resample('D').max()
 
 # Print the difference between the mean of sunny_daily_max and overcast_daily_max
 print(sunny_daily_max.mean() - overcast_daily_max.mean())
+
+# Import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
+
+# Select the visibility and dry_bulb_faren columns and resample them: weekly_mean
+weekly_mean = df_clean[['visibility', 'dry_bulb_faren']].resample('W').mean()
+
+# Print the output of weekly_mean.corr()
+print(weekly_mean.corr())
+
+# Plot weekly_mean with subplots=True
+weekly_mean.plot(subplots=True)
+plt.show()
+
+# Create a Boolean Series for sunny days: sunny
+sunny = df_clean['sky_condition'] == 'CLR'
+
+# Resample the Boolean Series by day and compute the sum: sunny_hours
+sunny_hours = sunny.resample('D').sum()
+
+# Resample the Boolean Series by day and compute the count: total_hours
+total_hours = sunny.resample('D').count()
+
+# Divide sunny_hours by total_hours: sunny_fraction
+sunny_fraction = sunny_hours / total_hours
+
+# Make a box plot of sunny_fraction
+sunny_fraction.plot(kind='box')
+plt.show()
+
+# Resample dew_point_faren and dry_bulb_faren by Month, aggregating the maximum values: monthly_max
+monthly_max = df_clean[['dew_point_faren', 'dry_bulb_faren']].resample('M').max()
+
+# Generate a histogram with bins=8, alpha=0.5, subplots=True
+monthly_max.plot(kind='hist', bins=8, alpha=0.5, subplots=True)
+
+# Show the plot
+plt.show()
+
+# Extract the maximum temperature in August 2010 from df_climate: august_max
+august_max = df_climate.loc['2010-Aug','Temperature'].max()
+print(august_max)
+
+# Resample August 2011 temps in df_clean by day & aggregate the max value: august_2011
+august_2011 = df_clean.loc['2011-Aug','dry_bulb_faren'].resample('D').max()
+
+# Filter for days in august_2011 where the value exceeds august_max: august_2011_high
+
+august_2011_high = august_2011.loc[august_2011 > august_max]
+
+# Construct a CDF of august_2011_high
+august_2011_high.plot(kind='hist', normed=True, cumulative=True, bins=25)
+
+# Display the plot
+plt.show()
