@@ -95,3 +95,94 @@ print(df.dropna(how='all').shape)
 
 # Drop columns in titanic with less than 1000 non-missing values
 print(titanic.dropna(thresh=1000, axis='columns').info())
+
+# Write a function to convert degrees Fahrenheit to degrees Celsius: to_celsius
+def to_celsius(F):
+    return 5/9*(F - 32)
+
+# Apply the function over 'Mean TemperatureF' and 'Mean Dew PointF': df_celsius
+df_celsius = weather[['Mean TemperatureF','Mean Dew PointF']].apply(to_celsius)
+
+# Reassign the columns df_celsius
+df_celsius.rename(columns={'Mean TemperatureF':'Mean TemperatureC', 'Mean Dew PointF':'Mean Dew PointC'}, inplace=True)
+
+# Print the output of df_celsius.head()
+print(df_celsius.head())
+
+# Create the dictionary: red_vs_blue
+red_vs_blue = {'Obama':'blue','Romney':'red'}
+
+# Use the dictionary to map the 'winner' column to the new column: election['color']
+election['color'] = election['winner'].map(red_vs_blue)
+
+# Print the output of election.head()
+print(election.head())
+
+# Import zscore from scipy.stats
+from scipy.stats import zscore
+
+# Call zscore with election['turnout'] as input: turnout_zscore
+turnout_zscore = zscore(election['turnout'])
+
+# Print the type of turnout_zscore
+print(type(turnout_zscore))
+
+# Assign turnout_zscore to a new column: election['turnout_zscore']
+election['turnout_zscore'] = turnout_zscore
+
+# Print the output of election.head()
+print(election.head())
+
+# Create the list of new indexes: new_idx
+new_idx = [month.upper() for month in sales.index]
+
+# Assign new_idx to sales.index
+sales.index = new_idx
+
+# Print the sales DataFrame
+print(sales)
+
+# Assign the string 'MONTHS' to sales.index.name
+sales.index.name='MONTHS'
+
+# Print the sales DataFrame
+print(sales)
+
+# Assign the string 'PRODUCTS' to sales.columns.name
+sales.columns.name='PRODUCTS'
+
+# Print the sales dataframe again
+print(sales)
+
+# Generate the list of months: months
+months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
+
+# Assign months to sales.index
+sales.index = months
+
+# Print the modified sales DataFrame
+print(sales)
+
+# Print sales.loc[['CA', 'TX']]
+print(sales.loc[['CA','TX']])
+
+# Print sales['CA':'TX']
+print(sales['CA':'TX'])
+
+# Set the index to be the columns ['state', 'month']: sales
+sales = sales.set_index(['state','month'])
+
+# Sort the MultiIndex: sales
+sales = sales.sort_index()
+
+# Print the sales DataFrame
+print(sales)
+
+# Set the index to the column 'state': sales
+sales = sales.set_index(['state'])
+
+# Print the sales DataFrame
+print(sales)
+
+# Access the data from 'NY'
+print(sales.loc['NY'])
