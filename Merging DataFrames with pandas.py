@@ -466,3 +466,94 @@ medal_counts = medals.pivot_table(aggfunc='count',index='Edition',values='Athlet
 # Print the first & last 5 rows of medal_counts
 print(medal_counts.head())
 print(medal_counts.tail())
+
+# Set Index of editions: totals
+totals = editions.set_index('Edition')
+
+# Reassign totals['Grand Total']: totals
+totals = totals['Grand Total']
+
+# Divide medal_counts by totals: fractions
+fractions = medal_counts.divide(totals,axis='rows')
+
+# Print first & last 5 rows of fractions
+print(fractions.head())
+print(fractions.tail())
+
+# Apply the expanding mean: mean_fractions
+mean_fractions = fractions.expanding().mean()
+
+# Compute the percentage change: fractions_change
+fractions_change = mean_fractions.pct_change()*100
+
+# Reset the index of fractions_change: fractions_change
+fractions_change = fractions_change.reset_index(['Edition'])
+
+# Print first & last 5 rows of fractions_change
+print(fractions_change.head())
+print(fractions_change.tail())
+
+# Import pandas
+import pandas as pd
+
+# Left join editions and ioc_codes: hosts
+hosts = pd.merge(editions,ioc_codes,how='left')
+
+# Extract relevant columns and set index: hosts
+hosts = hosts[['Edition','NOC']].set_index('Edition')
+
+# Fix missing 'NOC' values of hosts
+print(hosts.loc[hosts.NOC.isnull()])
+hosts.loc[1972, 'NOC'] = 'FRG'
+hosts.loc[1980, 'NOC'] = 'URS'
+hosts.loc[1988, 'NOC'] = 'KOR'
+
+# Reset Index of hosts: hosts
+hosts = hosts.reset_index()
+
+# Print hosts
+print(hosts)
+
+# Reshape fractions_change: reshaped
+reshaped = pd.melt(fractions_change,id_vars='Edition',value_name='Change')
+
+# Print reshaped.shape and fractions_change.shape
+print(reshaped.shape, fractions_change.shape)
+
+# Extract rows from reshaped where 'NOC' == 'CHN': chn
+chn = reshaped.loc[reshaped['NOC']=='CHN']
+
+# Print last 5 rows of chn with .tail()
+print(chn.tail())
+
+# Import pandas
+import pandas as pd
+
+# Merge reshaped and hosts: merged
+merged = pd.merge(reshaped,hosts,how='inner')
+
+# Print first 5 rows of merged
+print(merged.head())
+
+# Set Index of merged and sort it: influence
+influence = merged.set_index('Edition').sort_index()
+
+# Print first 5 rows of influence
+print(influence.head())
+
+# Import pyplot
+import matplotlib.pyplot as plt
+
+# Extract influence['Change']: change
+change = influence['Change']
+
+# Make bar plot of change: ax
+ax = change.plot(kind='bar')
+
+# Customize the plot to improve readability
+ax.set_ylabel("% Change of Host Country Medal Count")
+ax.set_title("Is there a Host Country Advantage?")
+ax.set_xticklabels(editions['City'])
+
+# Display the plot
+plt.show()
