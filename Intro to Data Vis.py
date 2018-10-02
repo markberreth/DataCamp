@@ -119,3 +119,81 @@ plt.xlabel('Year')
 plt.ylabel('Enrollment (%)')
 plt.title('Undergraduate enrollment of women')
 plt.show()
+
+# Plot with legend as before
+plt.plot(year, computer_science, color='red', label='Computer Science')
+plt.plot(year, physical_sciences, color='blue', label='Physical Sciences')
+plt.legend(loc='lower right')
+
+# Compute the maximum enrollment of women in Computer Science: cs_max
+cs_max = computer_science.max()
+
+# Calculate the year in which there was maximum enrollment of women in Computer Science: yr_max
+yr_max = year[computer_science.argmax()]
+
+# Add a black arrow annotation
+plt.annotate('Maximum', xy=(yr_max, cs_max), xytext=(yr_max+5, cs_max+5), arrowprops=dict(facecolor='black'))
+
+# Add axis labels and title
+plt.xlabel('Year')
+plt.ylabel('Enrollment (%)')
+plt.title('Undergraduate enrollment of women')
+plt.show()
+
+# Import matplotlib.pyplot
+import matplotlib.pyplot as plt
+
+# Set the style to 'ggplot'
+plt.style.use('ggplot')
+
+# Create a figure with 2x2 subplot layout
+plt.subplot(2, 2, 1)
+
+# Plot the enrollment % of women in the Physical Sciences
+plt.plot(year, physical_sciences, color='blue')
+plt.title('Physical Sciences')
+
+# Plot the enrollment % of women in Computer Science
+plt.subplot(2, 2, 2)
+plt.plot(year, computer_science, color='red')
+plt.title('Computer Science')
+
+# Add annotation
+cs_max = computer_science.max()
+yr_max = year[computer_science.argmax()]
+plt.annotate('Maximum', xy=(yr_max, cs_max), xytext=(yr_max-1, cs_max-10), arrowprops=dict(facecolor='black'))
+
+# Plot the enrollmment % of women in Health professions
+plt.subplot(2, 2, 3)
+plt.plot(year, health, color='green')
+plt.title('Health Professions')
+
+# Plot the enrollment % of women in Education
+plt.subplot(2, 2, 4)
+plt.plot(year, education, color='yellow')
+plt.title('Education')
+
+# Improve spacing between subplots and display them
+plt.tight_layout()
+plt.show()
+
+# Import numpy and matplotlib.pyplot
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Generate two 1-D arrays: u, v
+u = np.linspace(-2, 2, 41)
+v = np.linspace(-1, 1, 21)
+
+# Generate 2-D arrays from u and v: X, Y
+X,Y = np.meshgrid(u, v)
+
+# Compute Z based on X and Y
+Z = np.sin(3*np.sqrt(X**2 + Y**2))
+
+# Display the resulting image with pcolor()
+plt.pcolor(Z)
+plt.show()
+
+# Save the figure to 'sine_mesh.png'
+plt.savefig('sine_mesh.png')
