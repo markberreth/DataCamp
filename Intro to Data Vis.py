@@ -197,3 +197,254 @@ plt.show()
 
 # Save the figure to 'sine_mesh.png'
 plt.savefig('sine_mesh.png')
+
+# Generate a default contour map of the array Z
+plt.subplot(2,2,1)
+plt.contour(X,Y,Z)
+
+# Generate a contour map with 20 contours
+plt.subplot(2,2,2)
+plt.contour(X,Y,Z, 20)
+
+# Generate a default filled contour map of the array Z
+plt.subplot(2,2,3)
+plt.contourf(X,Y,Z)
+
+# Generate a default filled contour map with 20 contours
+plt.subplot(2,2,4)
+plt.contourf(X,Y,Z, 20)
+
+# Improve the spacing between subplots
+plt.tight_layout()
+
+# Display the figure
+plt.show()
+
+# Create a filled contour plot with a color map of 'viridis'
+plt.subplot(2,2,1)
+plt.contourf(X,Y,Z,20, cmap='viridis')
+plt.colorbar()
+plt.title('Viridis')
+
+# Create a filled contour plot with a color map of 'gray'
+plt.subplot(2,2,2)
+plt.contourf(X,Y,Z,20, cmap='gray')
+plt.colorbar()
+plt.title('Gray')
+
+# Create a filled contour plot with a color map of 'autumn'
+plt.subplot(2,2,3)
+plt.contourf(X,Y,Z,20, cmap='autumn')
+plt.colorbar()
+plt.title('Autumn')
+
+# Create a filled contour plot with a color map of 'winter'
+plt.subplot(2,2,4)
+plt.contourf(X,Y,Z,20, cmap='winter')
+plt.colorbar()
+plt.title('Winter')
+
+# Improve the spacing between subplots and display them
+plt.tight_layout()
+plt.show()
+
+# Generate a 2-D histogram
+plt.hist2d(hp, mpg, bins=(20,20), range=((40,235),(8,48)))
+
+# Add a color bar to the histogram
+plt.colorbar()
+
+# Add labels, title, and display the plot
+plt.xlabel('Horse power [hp]')
+plt.ylabel('Miles per gallon [mpg]')
+plt.title('hist2d() plot')
+plt.show()
+
+# Generate a 2d histogram with hexagonal bins
+plt.hexbin(hp, mpg, gridsize=(15, 12), extent=(40, 235, 8, 48))
+
+# Add a color bar to the histogram
+plt.colorbar()
+
+# Add labels, title, and display the plot
+plt.xlabel('Horse power [hp]')
+plt.ylabel('Miles per gallon [mpg]')
+plt.title('hexbin() plot')
+plt.show()
+
+# Load the image into an array: img
+img = plt.imread('480px-Astronaut-EVA.jpg')
+
+# Print the shape of the image
+print(img.shape)
+
+# Display the image
+plt.imshow(img)
+
+# Hide the axes
+plt.axis('off')
+plt.show()
+
+# Load the image into an array: img
+img = plt.imread('480px-Astronaut-EVA.jpg')
+
+# Print the shape of the image
+print(img.shape)
+
+# Compute the sum of the red, green and blue channels: intensity
+intensity = img.sum(axis=2)
+
+# Print the shape of the intensity
+print(intensity.shape)
+
+# Display the intensity with a colormap of 'gray'
+plt.imshow(intensity, cmap='gray')
+
+# Add a colorbar
+plt.colorbar()
+
+# Hide the axes and show the figure
+plt.axis('off')
+plt.show()
+
+# Load the image into an array: img
+img = plt.imread('480px-Astronaut-EVA.jpg')
+
+# Specify the extent and aspect ratio of the top left subplot
+plt.subplot(2,2,1)
+plt.title('extent=(-1,1,-1,1),\naspect=0.5')
+plt.xticks([-1,0,1])
+plt.yticks([-1,0,1])
+plt.imshow(img, extent=(-1,1,-1,1), aspect=0.5)
+
+# Specify the extent and aspect ratio of the top right subplot
+plt.subplot(2,2,2)
+plt.title('extent=(-1,1,-1,1),\naspect=1')
+plt.xticks([-1,0,1])
+plt.yticks([-1,0,1])
+plt.imshow(img, extent=(-1,1,-1,1), aspect=1)
+
+# Specify the extent and aspect ratio of the bottom left subplot
+plt.subplot(2,2,3)
+plt.title('extent=(-1,1,-1,1),\naspect=2')
+plt.xticks([-1,0,1])
+plt.yticks([-1,0,1])
+plt.imshow(img, extent=(-2,2,-1,1), aspect=2)
+
+# Specify the extent and aspect ratio of the bottom right subplot
+plt.subplot(2,2,4)
+plt.title('extent=(-2,2,-1,1),\naspect=2')
+plt.xticks([-2,-1,0,1,2])
+plt.yticks([-1,0,1])
+plt.imshow(img, extent=(-2,2,-1,1), aspect=2)
+
+# Improve spacing and display the figure
+plt.tight_layout()
+plt.show()
+
+# Load the image into an array: image
+image = plt.imread('640px-Unequalized_Hawkes_Bay_NZ.jpg')
+
+# Extract minimum and maximum values from the image: pmin, pmax
+pmin, pmax = image.min(), image.max()
+print("The smallest & largest pixel intensities are %d & %d." % (pmin, pmax))
+
+# Rescale the pixels: rescaled_image
+rescaled_image = 256*(image - pmin) / (pmax - pmin)
+print("The rescaled smallest & largest pixel intensities are %.1f & %.1f." %
+      (rescaled_image.min(), rescaled_image.max()))
+
+# Display the original image in the top subplot
+plt.subplot(2,1,1)
+plt.title('original image')
+plt.axis('off')
+plt.imshow(image)
+
+# Display the rescaled image in the bottom subplot
+plt.subplot(2,1,2)
+plt.title('rescaled image')
+plt.axis('off')
+plt.imshow(rescaled_image)
+
+plt.show()
+
+# Import plotting modules
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Plot a linear regression between 'weight' and 'hp'
+sns.lmplot(x='weight', y='hp', data=auto)
+
+# Display the plot
+plt.show()
+
+# Import plotting modules
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Generate a green residual plot of the regression between 'hp' and 'mpg'
+sns.residplot(x='hp', y='mpg', data=auto, color='green')
+
+# Display the plot
+plt.show()
+
+# Generate a scatter plot of 'weight' and 'mpg' using red circles
+plt.scatter(auto['weight'], auto['mpg'], label='data', color='red', marker='o')
+
+# Plot in blue a linear regression of order 1 between 'weight' and 'mpg'
+sns.regplot(x='weight', y='mpg', data=auto, scatter=None, color='blue', label='order 1')
+
+# Plot in green a linear regression of order 2 between 'weight' and 'mpg'
+sns.regplot(x='weight', y='mpg', data=auto, scatter=None, color='green', order=2, label='order 2')
+
+# Add a legend and display the plot
+plt.legend(loc='upper right')
+plt.show()
+
+# Plot a linear regression between 'weight' and 'hp', with a hue of 'origin' and palette of 'Set1'
+sns.lmplot(x='weight', y='hp', data=auto, hue='origin', palette='Set1')
+
+# Display the plot
+plt.show()
+
+# Plot linear regressions between 'weight' and 'hp' grouped row-wise by 'origin'
+sns.lmplot(x='weight', y='hp', data=auto, row='origin')
+
+# Display the plot
+plt.show()
+
+# Make a strip plot of 'hp' grouped by 'cyl'
+plt.subplot(2,1,1)
+sns.stripplot(x='cyl', y='hp', data=auto)
+
+# Make the strip plot again using jitter and a smaller point size
+plt.subplot(2,1,2)
+sns.stripplot(x='cyl', y='hp', size=3, data=auto, jitter=True)
+
+# Display the plot
+plt.show()
+
+# Generate a swarm plot of 'hp' grouped horizontally by 'cyl'
+plt.subplot(2,1,1)
+sns.swarmplot(x='cyl', y='hp', data=auto, orient='h')
+
+# Generate a swarm plot of 'hp' grouped vertically by 'cyl' with a hue of 'origin'
+plt.subplot(2,1,2)
+sns.swarmplot(x='hp', y='cyl', data=auto, hue='origin', orient='h')
+
+# Display the plot
+plt.show()
+
+# Generate a violin plot of 'hp' grouped horizontally by 'cyl'
+plt.subplot(2,1,1)
+sns.violinplot(x='cyl', y='hp', data=auto)
+
+# Generate the same violin plot again with a color of 'lightgray' and without inner annotations
+plt.subplot(2,1,2)
+sns.violinplot(x='cyl', y='hp', data=auto, inner=None, color='lightgray')
+
+# Overlay a strip plot on the violin plot
+sns.stripplot(x='cyl', y='hp', data=auto, jitter=True, size=1.5)
+
+# Display the plot
+plt.show()
