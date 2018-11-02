@@ -263,3 +263,30 @@ n_lose_money = np.sum(n_defaults>=10)
 
 # Compute and print probability of losing money
 print('Probability of losing money =', n_lose_money / len(n_defaults))
+
+# Take 10,000 samples out of the binomial distribution: n_defaults
+n_defaults = np.random.binomial(n=100, p=0.05, size=10000)
+
+# Compute CDF: x, y
+x,y = ecdf(n_defaults)
+
+# Plot the CDF with axis labels
+plt.plot(x,y, marker='.', linestyle='none')
+plt.xlabel('defaults out of 100 loans')
+plt.ylabel('CDF')
+
+# Show the plot
+plt.show()
+
+# Compute bin edges: bins
+bins = np.arange(0, max(n_defaults) + 1.5) - 0.5
+
+# Generate histogram
+plt.hist(n_defaults, normed=True, bins=bins)
+
+# Label axes
+plt.xlabel('default loans')
+plt.ylabel('CFD')
+
+# Show the plot
+plt.show()
