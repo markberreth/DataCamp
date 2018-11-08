@@ -768,3 +768,101 @@ p = np.sum(perm_replicates >= empirical_diff_means) / len(perm_replicates)
 
 # Print the result
 print('p-value =', p)
+
+# Make an array of translated impact forces: translated_force_b
+translated_force_b = force_b - np.mean(force_b) + 0.55
+
+# Take bootstrap replicates of Frog B's translated impact forces: bs_replicates
+bs_replicates = draw_bs_reps(translated_force_b, np.mean, 10000)
+
+# Compute fraction of replicates that are less than the observed Frog B force: p
+p = np.sum(bs_replicates <= np.mean(force_b)) / 10000
+
+# Print the p-value
+print('p = ', p)
+
+# Compute difference of mean impact force from experiment: empirical_diff_means
+empirical_diff_means = diff_of_means(force_a, force_b)
+
+# Concatenate forces: forces_concat
+forces_concat = np.concatenate((force_a, force_b))
+
+# Initialize bootstrap replicates: bs_replicates
+bs_replicates = np.empty(10000)
+
+for i in range(10000):
+    # Generate bootstrap sample
+    bs_sample = np.random.choice(forces_concat, size=len(forces_concat))
+
+    # Compute replicate
+    bs_replicates[i] = diff_of_means(bs_sample[:len(force_a)],
+                                     bs_sample[len(force_a):])
+
+# Compute and print p-value: p
+p = np.sum(bs_replicates >= empirical_diff_means) / len(bs_replicates)
+print('p-value =', p)
+
+# Compute mean of all forces: mean_force
+mean_force = np.mean(forces_concat)
+
+# Generate shifted arrays
+force_a_shifted = force_a - np.mean(force_a) + mean_force
+force_b_shifted = force_b - np.mean(force_b) + mean_force
+
+# Compute 10,000 bootstrap replicates from shifted arrays
+bs_replicates_a = draw_bs_reps(force_a_shifted, np.mean, size=10000)
+bs_replicates_b = draw_bs_reps(force_b_shifted, np.mean, size=10000)
+
+# Get replicates of difference of means: bs_replicates
+bs_replicates = bs_replicates_a - bs_replicates_b
+
+# Compute and print p-value: p
+p = np.sum(bs_replicates >= empirical_diff_means) / len(bs_replicates)
+print('p-value =', p)
+
+'''A/B Testing'''
+
+# Construct arrays of data: dems, reps
+dems = np.array([True] * 153 + [False] * 91)
+reps = np.array([True] * 136 + [False] * 35)
+
+def frac_yea_dems(dems, reps):
+    """Compute fraction of Democrat yea votes."""
+    frac = np.sum(dems) / len(dems)
+    return frac
+
+# Acquire permutation samples: perm_replicates
+perm_replicates = draw_perm_reps(dems, reps, frac_yea_dems, 10000)
+
+# Compute and print p-value: p
+p = np.sum(perm_replicates <= 153/244) / len(perm_replicates)
+print('p-value =', p)
+
+# Compute the observed difference in mean inter-no-hitter times: nht_diff_obs
+nht_diff_obs = diff_of_means(nht_dead, nht_live)
+
+# Acquire 10,000 permutation replicates of difference in mean no-hitter time: perm_replicates
+perm_replicates = draw_perm_reps(nht_dead, nht_live, diff_of_means, 10000)
+
+
+# Compute and print the p-value: p
+p = np.sum(perm_replicates <= nht_diff_obs) / len(perm_replicates)
+print('p-val =', p)
+
+# Compute observed correlation: r_obs
+r_obs = pearson_r(illiteracy, fertility)
+
+# Initialize permutation replicates: perm_replicates
+perm_replicates = np.empty(10000)
+
+# Draw replicates
+for i in range(10000):
+    # Permute illiteracy measurments: illiteracy_permuted
+    illiteracy_permuted = np.random.permutation(illiteracy)
+
+    # Compute Pearson correlation
+    perm_replicates[i] = pearson_r(illiteracy_permuted, fertility)
+
+# Compute p-value: p
+p = np.sum(perm_replicates >= r_obs) / len(perm_replicates)
+print('p-val =', p)
