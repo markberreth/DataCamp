@@ -349,3 +349,237 @@ plt.plot(range(1, 7), BIC[1:7], marker='o')
 plt.xlabel('Order of AR Model')
 plt.ylabel('Bayesian Information Criterion')
 plt.show()
+
+# import the module for simulating data
+from statsmodels.tsa.arima_process import ArmaProcess
+
+# Plot 1: MA parameter = -0.9
+plt.subplot(2,1,1)
+ar1 = np.array([1])
+ma1 = np.array([1, -0.9])
+MA_object1 = ArmaProcess(ar1, ma1)
+simulated_data_1 = MA_object1.generate_sample(nsample=1000)
+plt.plot(simulated_data_1)
+
+# Plot 2: MA parameter = +0.9
+plt.subplot(2,1,2)
+ar2 = np.array([1])
+ma2 = np.array([1, 0.9])
+MA_object2 = ArmaProcess(ar2, ma2)
+simulated_data_2 = MA_object2.generate_sample(nsample=1000)
+plt.plot(simulated_data_2)
+
+plt.show()
+
+# Import the plot_acf module from statsmodels
+from statsmodels.graphics.tsaplots import plot_acf
+
+# Plot three ACF on same page for comparison using subplots
+fig, axes = plt.subplots(3,1)
+
+# Plot 1: AR parameter = -0.9
+plot_acf(simulated_data_1, lags=20, ax=axes[0])
+axes[0].set_title("MA Parameter -0.9")
+
+# Plot 2: AR parameter = +0.9
+plot_acf(simulated_data_2, lags=20, ax=axes[1])
+axes[1].set_title("MA Parameter +0.9")
+
+# Plot 3: AR parameter = -0.3
+plot_acf(simulated_data_3, lags=20, ax=axes[2])
+axes[2].set_title("MA Parameter -0.3")
+plt.show()
+
+# Import the ARMA module from statsmodels
+from statsmodels.tsa.arima_model import ARMA
+
+# Fit an MA(1) model to the first simulated data
+mod = ARMA(simulated_data_1, order=(0,1))
+res = mod.fit()
+
+# Print out summary information on the fit
+print(res.summary())
+
+# Print out the estimate for the constant and for theta
+print("When the true theta=-0.9, the estimate of theta (and the constant) are:")
+print(res.params)
+
+# Import the ARMA module from statsmodels
+from statsmodels.tsa.arima_model import ARMA
+
+# Forecast the first MA(1) model
+mod = ARMA(simulated_data_1, order=(0,1))
+res = mod.fit()
+res.plot_predict(start=990, end=1010)
+plt.show()
+
+# import datetime module
+import datetime
+
+# Change the first date to zero
+intraday.iloc[0,0] = 0
+
+# Change the column headers to 'DATE' and 'CLOSE'
+intraday.columns = ['DATE','CLOSE']
+
+# Examine the data types for each column
+print(intraday.dtypes)
+
+# Convert DATE column to numeric
+intraday['DATE'] = pd.to_numeric(intraday['DATE'])
+
+# Make the `DATE` column the new index
+intraday = intraday.set_index('DATE')
+
+# Notice that some rows are missing
+print("The length of the DataFrame is: ",len(intraday))
+
+# Find the missing rows
+print("Missing rows: ", set(range(391)) - set(intraday.index))
+
+# Fill in the missing rows
+intraday = intraday.reindex(range(391), method='ffill')
+
+# Change the index to the intraday times
+intraday.index = pd.date_range(start='2017-08-28 9:30', end='2017-08-28 16:00', freq='1min')
+
+# Plot the intraday time series
+intraday.plot(grid=True)
+plt.show()
+
+# Import plot_acf and ARMA modules from statsmodels
+from statsmodels.graphics.tsaplots import plot_acf
+from statsmodels.tsa.arima_model import ARMA
+
+# Compute returns from prices and drop the NaN
+returns = intraday.pct_change()
+returns = returns.dropna()
+
+# Plot ACF of returns with lags up to 60 minutes
+plot_acf(returns, lags=60)
+plt.show()
+
+# Fit the data to an MA(1) model
+mod = ARMA(returns, order=(0,1))
+res = mod.fit()
+print(res.params)
+
+# import the modules for simulating data and plotting the ACF
+from statsmodels.tsa.arima_process import ArmaProcess
+from statsmodels.graphics.tsaplots import plot_acf
+
+# Build a list MA parameters
+ma = [0.8**i for i in range(30)]
+
+# Simulate the MA(30) model
+ar = np.array([1])
+AR_object = ArmaProcess(ar, ma)
+simulated_data = AR_object.generate_sample(nsample=5000)
+
+# Plot the ACF
+plot_acf(simulated_data, lags=30)
+plt.show()
+
+# Plot the prices separately
+plt.subplot(2,1,1)
+plt.plot(7.25*HO, label='Heating Oil')
+plt.plot(NG, label='Natural Gas')
+plt.legend(loc='best', fontsize='small')
+
+# Plot the spread
+plt.subplot(2,1,2)
+plt.plot(7.25*HO-NG, label='Spread')
+plt.legend(loc='best', fontsize='small')
+plt.axhline(y=0, linestyle='--', color='k')
+plt.show()
+
+# Import the adfuller module from statsmodels
+from statsmodels.tsa.stattools import adfuller
+
+# Compute the ADF for HO and NG
+result_HO = adfuller(HO['Close'])
+print("The p-value for the ADF test on HO is ", result_HO[1])
+result_NG = adfuller(NG['Close'])
+print("The p-value for the ADF test on NG is ", result_NG[1])
+
+# Compute the ADF of the spread
+result_spread = adfuller(7.25 * HO['Close'] - NG['Close'])
+print("The p-value for the ADF test on the spread is ", result_spread[1])
+
+# Import the statsmodels module for regression and the adfuller function
+import statsmodels.api as sm
+from statsmodels.tsa.stattools import adfuller
+
+# Regress BTC on ETH
+ETH = sm.add_constant(ETH)
+result = sm.OLS(BTC,ETH).fit()
+
+# Compute ADF
+b = result.params[1]
+adf_stats = adfuller(BTC['Price'] - b*ETH['Price'])
+print("The p-value for the ADF test is ", adf_stats[1])
+
+# Import the adfuller function from the statsmodels module
+from statsmodels.tsa.stattools import adfuller
+
+# Convert the index to a datetime object
+temp_NY.index = pd.to_datetime(temp_NY.index, format='%Y')
+
+# Plot average temperatures
+temp_NY.plot()
+plt.show()
+
+# Compute and print ADF p-value
+result = adfuller(temp_NY['TAVG'])
+print("The p-value for the ADF test is ", result[1])
+
+# Import the modules for plotting the sample ACF and PACF
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+
+# Take first difference of the temperature Series
+chg_temp = temp_NY.diff()
+chg_temp = chg_temp.dropna()
+
+# Plot the ACF and PACF on the same page
+fig, axes = plt.subplots(2,1)
+
+# Plot the ACF
+plot_acf(chg_temp, lags=20, ax=axes[0])
+
+# Plot the PACF
+plot_pacf(chg_temp, lags=20, ax=axes[1])
+plt.show()
+
+# Import the module for estimating an ARMA model
+from statsmodels.tsa.arima_model import ARMA
+
+# Fit the data to an AR(1) model and print AIC:
+mod = ARMA(chg_temp, order=(1,0))
+res = mod.fit()
+print("The AIC for an AR(1) is: ", res.aic)
+
+# Fit the data to an AR(2) model and print AIC:
+mod = ARMA(chg_temp, order=(2,0))
+res = mod.fit()
+print("The AIC for an AR(2) is: ", res.aic)
+
+# Fit the data to an MA(1) model and print AIC:
+mod = ARMA(chg_temp, order=(0,1))
+res = mod.fit()
+print("The AIC for an MA(1) is: ", res.aic)
+
+# Fit the data to an ARMA(1,1) model and print AIC:
+mod = ARMA(chg_temp, order=(1,1))
+res = mod.fit()
+print("The AIC for an ARMA(1,1) is: ", res.aic)
+
+# Import the ARIMA module from statsmodels
+from statsmodels.tsa.arima_model import ARIMA
+
+# Forecast interest rates using an AR(1) model
+mod = ARIMA(temp_NY, order=(1,1,1))
+res = mod.fit()
+
+# Plot the original series and the forecasted series
+res.plot_predict(start='1872-01-01', end='2046-01-01')
+plt.show()
