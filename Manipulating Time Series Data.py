@@ -181,3 +181,32 @@ print(weekly_ffill.head())
 # Plot weekly_fill starting 2015 here
 weekly_ffill.loc['2015':].plot()
 plt.show()
+
+# Inspect data here
+print(monthly.info())
+
+# Create weekly dates
+weekly_dates = pd.date_range(start=monthly.index.min(), end=monthly.index.max(), freq='w')
+
+# Reindex monthly to weekly data
+weekly = monthly.reindex(weekly_dates)
+
+# Create ffill and interpolated columns
+weekly['ffill'] = weekly.UNRATE.ffill()
+weekly['interpolated'] = weekly.UNRATE.interpolate()
+
+# Plot weekly
+weekly.plot()
+plt.show()
+
+# Import & inspect data here
+data = pd.read_csv('debt_unemployment.csv', index_col='date', parse_dates=['date'])
+print(data.info())
+
+# Interpolate and inspect here
+interpolated = data.interpolate()
+print(interpolated.info())
+
+# Plot interpolated data here
+interpolated.plot(secondary_y='Unemployment')
+plt.show()
